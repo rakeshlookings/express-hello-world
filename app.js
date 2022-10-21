@@ -2,9 +2,12 @@ const router = require('./src/routes')
 require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
+const cors = require('cors')
 const ENV = process.env
 
 const app = express()
+
+app.use(cors())
 
 let connectionUrl = 'mongodb+srv://username:password@database.faufozt.mongodb.net/?retryWrites=true&w=majority'
 const connectionValues = {
