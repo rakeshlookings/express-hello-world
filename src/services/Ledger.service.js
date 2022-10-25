@@ -11,8 +11,13 @@ const create = async({body}) => {
     }
 }
 
-const list = async() => {
-    const items = await Ledger.find().lean()
+const list = async({query}) => {
+    let page = 0; limit = 10
+    if (query.page && query.limit) {
+        page = query.page;
+        limit = query.limit
+    }
+    const items = await Ledger.find().skip(page * limit).limit(limit)
     return {
         status:true,
         items: items
