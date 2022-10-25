@@ -17,7 +17,7 @@ const list = async({query}) => {
         page = query.page;
         limit = query.limit
     }
-    const items = await Ledger.find().skip(page * limit).limit(limit)
+    const items = await Ledger.find().skip(Number(page) * Number(limit)).limit(Number(limit))
     return {
         status:true,
         items: items
