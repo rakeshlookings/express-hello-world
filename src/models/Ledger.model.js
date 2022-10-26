@@ -6,7 +6,8 @@ const ledgerSchema = new Schema({
     amount: {type:Number, require:true},
     category: String,
     seller:{type:String, require:true},
-    reference:String
+    reference:String,
+    date:number
 })
 
 const Ledger = mongoose.model('Ledger', ledgerSchema)

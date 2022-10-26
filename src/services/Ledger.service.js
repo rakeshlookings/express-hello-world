@@ -2,7 +2,7 @@ const Ledger = require('../models/Ledger.model')
 
 const create = async({body}) => {
     const object =  new Ledger({
-        amount:body.amount, category: body.category, seller:body.seller, reference: body.reference
+        amount:body.amount, category: body.category, seller:body.seller, reference: body.reference, date:body.date
     })
     const obj = await object.save()
     return {
