@@ -30,7 +30,9 @@ const list = async({query}) => {
         return {
             amount: item.amount,
             seller: item.seller,
-            day: day
+            day: day,
+            category: item.category,
+            reference: item.reference
         }
     })
     return {
