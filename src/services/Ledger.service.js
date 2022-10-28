@@ -12,9 +12,10 @@ const create = async({body}) => {
 }
 
 const list = async({query}) => {
-    const filter = {}
+    let filter = {}
     if (query?.timespan === 'day') {
-        const span = listByDaySpan()
+        let span = listByDaySpan()
+        span = new Date.now().getMilliseconds()- span
         filter = {"date"  : {$gte : span}}
     }
     let page = 0; limit = 10
