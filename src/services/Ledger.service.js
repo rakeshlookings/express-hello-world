@@ -15,7 +15,7 @@ const list = async({query}) => {
     let filter = {}
     if (query?.timespan === 'day') {
         let span = listByDaySpan()
-        span = new Date.now().getMilliseconds()- span
+        span = new Date().getMilliseconds()- span
         filter = {"date"  : {$gte : span}}
     }
     let page = 0; limit = 10
