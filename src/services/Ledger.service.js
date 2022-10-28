@@ -12,16 +12,38 @@ const create = async({body}) => {
 }
 
 const list = async({query}) => {
+    const filter = {}
+    if (query?.timespan === 'day') {
+        const span = listByDaySpan()
+        filter = {"date"  : {$gte : span}}
+    }
     let page = 0; limit = 10
     if (query.page && query.limit) {
         page = query.page;
         limit = query.limit
     }
-    const items = await Ledger.find().skip(Number(page) * Number(limit)).limit(Number(limit))
+    let items = await Ledger.find(filter).skip(Number(page) * Number(limit)).limit(Number(limit))
+    items = items.map(item => {
+        const day = new Date(item.date).getFullYear() + ' ' + new Date(item.date).getMonth() + ' ' + new Date(item.date).getDate()
+        return {
+            amount: item.amount,
+            seller: item.seller,
+            day: day
+        }
+    })
     return {
         status:true,
         items: items
     }
+}
+
+const listByDaySpan = () => {
+    const date = new Date();
+    const hours = date.getHours()
+    const minutes = date.getMinutes()
+    const seconds = date.getSeconds()
+    const span = ((hours * 3600) + (minutes * 60) + (seconds) ) * 1000
+    return span
 }
 
 const getOne = async({params}) => {
