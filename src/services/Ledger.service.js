@@ -2,7 +2,7 @@ const Ledger = require('../models/Ledger.model')
 
 const create = async({body}) => {
     const object =  new Ledger({
-        amount:body.amount, category: body.category, seller:body.seller, reference: body.reference, date:body.date
+        amount:body.amount, category: body.category, seller:body.seller, reference: body.reference, date:new Date()
     })
     const obj = await object.save()
     return {
@@ -15,8 +15,9 @@ const list = async({query}) => {
     let filter = {}
     if (query?.timespan === 'day') {
         let span = listByDaySpan()
-        span = new Date().getMilliseconds()- span
+        span = new Date() - span
         filter = {"date"  : {$gte : span}}
+        console.log(span)
     }
     let page = 0; limit = 10
     if (query.page && query.limit) {
@@ -44,6 +45,7 @@ const listByDaySpan = () => {
     const minutes = date.getMinutes()
     const seconds = date.getSeconds()
     const span = ((hours * 3600) + (minutes * 60) + (seconds) ) * 1000
+    console.log(hours,minutes,seconds,span)
     return span
 }
 
