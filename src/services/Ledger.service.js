@@ -1,5 +1,7 @@
 const Ledger = require('../models/Ledger.model')
 
+const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+
 const create = async ({ body }) => {
     const object = new Ledger({
         amount: body.amount, category: body.category, seller: body.seller, reference: body.reference, date: new Date()
@@ -44,7 +46,8 @@ const list = async ({ query }) => {
     }
     let items = await Ledger.find(filter).skip(Number(page) * Number(limit)).limit(Number(limit))
     items = items.map(item => {
-        const day = new Date(item.date).getFullYear() + ' ' + new Date(item.date).getMonth() + ' ' + new Date(item.date).getDate()
+        let day = new Date(item.date) 
+        day = `${day.getDate()}-${months[day.getMonth()]}-${day.getFullYear()}`
         return {
             amount: item.amount,
             seller: item.seller,
@@ -53,8 +56,13 @@ const list = async ({ query }) => {
             reference: item.reference
         }
     })
+    const sum = await Ledger.aggregate([
+        { $match: filter },
+        { $group: { _id: null, amount: { $sum: "$amount" } } }
+    ])
     return {
         status: true,
+        sum:sum,
         items: items
     }
 }
